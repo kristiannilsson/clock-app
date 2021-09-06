@@ -15,3 +15,7 @@
   width: 1rem;
   height: 1rem;
 }
+
+.refresh:hover {
+  cursor: pointer;
+}
