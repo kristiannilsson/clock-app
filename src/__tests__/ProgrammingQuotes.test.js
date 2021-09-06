@@ -1,43 +1,35 @@
-import {
-  render,
-  screen,
-  waitFor,
-  userEvent,
-  getByRole,
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import ProgrammingQuotes from "../components/ProgrammingQuotes/ProgrammingQuotes";
 
 describe("ProgrammingQuotes Unit Test", () => {
-  test("Initial state", async () => {
-    const sampleData = { quote: "lorem", author: "ipsum" };
-    render(<ProgrammingQuotes />);
-    jest
+  test("Refreshes quote on click", async () => {
+    const sampleData1 = { quote: "lorem", author: "ipsum" };
+    const sampleData2 = {
+      quote: "Yxmördaren Julia Blomqvist på fäktning i Schweiz",
+      author: "ipsum",
+    };
+    const spy = jest
       .spyOn(ProgrammingQuotes.prototype, "getQuote")
-      .mockImplementation(() => {
-        return sampleData;
+      .mockImplementationOnce(() => {
+        return sampleData1;
+      })
+      .mockImplementationOnce(() => {
+        return sampleData2;
       });
-    const quote = await screen.findByTestId("quote");
-    await waitFor(() => {
-      expect(quote).toHaveTextContent(sampleData.quote);
-    });
-    test("Refreshes quote on click", async () => {
-      const sampleData = {
-        quote: "Flygande bäckasiner söka hwila på mjuka tuvor",
-        author: "kungen",
-      };
+    render(<ProgrammingQuotes />);
 
-      jest
-        .spyOn(ProgrammingQuotes.prototype, "getQuote")
-        .mockImplementation(() => {
-          return sampleData;
-        });
-      render(<ProgrammingQuotes />);
-      const quote = await screen.findByTestId("quote");
-      const refresh = getByTestId("refresh");
-      await waitFor(() => {
-        userEvent.click();
-        expect(quote).toHaveTextContent(sampleData.quote);
-      });
-    });
+    //getQuote() is called exactly once in mount
+    expect(spy).toBeCalledTimes(1);
+
+    let quote = await screen.findByTestId("quote");
+    expect(quote).toHaveTextContent(sampleData1.quote);
+
+    const refresh = screen.getByAltText("refresh");
+    fireEvent.click(refresh);
+
+    expect(spy).toBeCalledTimes(2);
+
+    quote = await screen.findByTestId("quote");
+    expect(quote).toHaveTextContent(sampleData2.quote);
   });
 });

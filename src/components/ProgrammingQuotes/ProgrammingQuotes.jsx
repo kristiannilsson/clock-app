@@ -27,12 +27,13 @@ export default class ProgrammingQuotes extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <p data-testid="quote" className={styles.quote}>
-          "{this.state.quote}"<br />
-          <strong className={styles.author}>{this.state.author}</strong>
-        </p>
+        {this.state.quote && (
+          <p data-testid="quote" className={styles.quote}>
+            "{this.state.quote}"<br />
+            <strong className={styles.author}>{this.state.author}</strong>
+          </p>
+        )}
         <input
-          data-testid="refresh"
           className={styles.refresh}
           type="image"
           src={refresh}
