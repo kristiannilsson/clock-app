@@ -1,4 +1,20 @@
-#root {
+.app {
   padding: 3% 5%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-size: cover;
+}
+
+@media only screen and (min-width: 768px) {
+  .app {
+    padding: 6% 8%;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .app {
+    padding: 6% 11%;
+  }
 }

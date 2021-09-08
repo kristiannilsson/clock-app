@@ -1,0 +1,30 @@
+.author {
+  font-weight: 700;
+}
+
+.quote {
+  margin-right: 2rem;
+  line-height: 22px;
+}
+
+.container {
+  display: flex;
+}
+
+.refresh {
+  width: 1rem;
+  height: 1rem;
+}
+
+.refresh:hover {
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
+  .quote {
+    line-height: 28px;
+  }
+  .container {
+    width: 600px;
+  }
+}

@@ -1,0 +1,19 @@
+.city {
+  font-size: 15px;
+  line-height: 28px;
+  letter-spacing: 3px;
+}
+
+@media only screen and (min-width: 768px) {
+  .city {
+    font-size: 18px;
+    letter-spacing: 3.6px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .city {
+    font-size: 24px;
+    letter-spacing: 4.8px;
+  }
+}

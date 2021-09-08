@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styles from "./ProgrammingQuotes.module.css";
-import refresh from "../../assets/desktop/icon-refresh.svg";
+import refresh from "../assets/desktop/icon-refresh.svg";
 
 export default class ProgrammingQuotes extends Component {
   state = { quote: undefined, author: undefined };
@@ -29,7 +29,7 @@ export default class ProgrammingQuotes extends Component {
       <div className={styles.container}>
         {this.state.quote && (
           <p data-testid="quote" className={styles.quote}>
-            "{this.state.quote}"<br />
+            "{this.state.quote}"<br /> <br />
             <strong className={styles.author}>{this.state.author}</strong>
           </p>
         )}
