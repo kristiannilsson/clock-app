@@ -4,19 +4,50 @@ import React, { Component } from "react";
 import ClockContainer from "./components/ClockContainer/ClockContainer";
 
 export default class App extends Component {
-  state = { windowWidth: window.innerWidth, timeOfDay: undefined };
-  componentDidMount() {
+  state = {
+    windowWidth: window.innerWidth,
+    time: new Date(),
+    location: undefined,
+  };
+  async componentDidMount() {
     window.addEventListener("resize", this.handleResize);
-    console.log(this.state.windowWidth);
+    this.timer = setInterval(this.tick, 1000);
+    const loc = await this.getLocation();
+    this.setState({ location: loc });
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    clearInterval(this.timer);
   }
+
+  //returns "day" or "night" depending on hour
+  getTimeOfDay(hour) {
+    return hour > 5 && hour < 18 ? "day" : "night";
+  }
+
+  tick = () => {
+    const newTime = new Date();
+    const timeOfDay = this.getTimeOfDay(newTime.getHours());
+    const newState = { time: newTime };
+    if (this.state.timeOfDay !== timeOfDay) {
+      newState.timeOfDay = timeOfDay;
+    }
+    this.setState(newState);
+  };
 
   handleResize = () => {
     this.setState({ windowWidth: window.innerWidth });
   };
+
+  async getLocation() {
+    try {
+      const api_call = await fetch("https://freegeoip.app/json/");
+      return await api_call.json();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   getDevice() {
     const width = this.state.windowWidth;
@@ -29,13 +60,7 @@ export default class App extends Component {
     }
   }
 
-  setTimeOfDay = (timeOfDay) => {
-    if (this.state.timeOfDay !== timeOfDay) {
-      this.setState({
-        timeOfDay: timeOfDay,
-      });
-    }
-  };
+  setTimeOfDay = (timeOfDay) => {};
 
   render() {
     return (
@@ -49,7 +74,7 @@ export default class App extends Component {
         }}
       >
         <ProgrammingQuotes />
-        <ClockContainer setBackgroundPathCB={this.setTimeOfDay} />
+        <ClockContainer time={this.state.time} location={this.state.location} />
       </div>
     );
   }

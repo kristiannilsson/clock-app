@@ -8,37 +8,9 @@ import City from "./City";
 import timezones from "./timezones.json";
 
 export default class ClockContainer extends Component {
-  state = { time: new Date(), location: undefined };
-
-  async componentDidMount() {
-    this.timer = setInterval(this.tick, 1000);
-    const loc = await this.getLocation();
-    this.setState({ location: loc });
-  }
-
-  //Send up timeOfDay to App.js and update state if necessary.
-  componentDidUpdate() {
-    const hour = this.state.time;
-    const timeOfDay = hour > 5 && hour < 18 ? "day" : "night";
-    this.props.setBackgroundPathCB(timeOfDay);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-
-  async getLocation() {
-    try {
-      const api_call = await fetch("https://freegeoip.app/json/");
-      return await api_call.json();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   //maps the right abbreviation to the right timezone
   timeZoneMapper() {
-    return timezones[this.state.location.time_zone];
+    return timezones[this.props.location.time_zone];
   }
 
   //Return icon and appropiate greeting dependent on hour.
@@ -52,40 +24,33 @@ export default class ClockContainer extends Component {
     }
   }
 
-  /* Returns hours and minutes from this.state.time in string format. 
+  /* Returns hours and minutes from given date in string format. 
   Also Prefixes "0" to hours and minutes < 10. */
-  timeToString() {
-    const time = this.state.time;
+  timeToString(date) {
     //Prefixes "0" to hours and minutes < 10.
     const hours =
-      time.getHours() < 10 ? `0${time.getHours()}` : `${time.getHours()}`;
+      date.getHours() < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
     const minutes =
-      time.getMinutes() < 10 ? `0${time.getMinutes()}` : `${time.getMinutes()}`;
+      date.getMinutes() < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
 
     return `${hours}:${minutes}`;
   }
 
-  //Updates time
-  tick = () => {
-    this.setState({ time: new Date() });
-  };
-
   render() {
-    //Returns object from greetingGenerator() with current time as parameter
-    const greetingRes = this.greetingGenerator(this.state.time.getHours());
+    //Returns object from greetingGenerator() with current date as parameter
+    const greetingRes = this.greetingGenerator(this.props.time.getHours());
     return (
       <div className={styles.clockContainer}>
-        {this.state.location && (
+        {this.props.location && (
           <>
             <Greeting icon={greetingRes.icon} greeting={greetingRes.greeting} />
             <Clock
-              time={this.timeToString()}
+              time={this.timeToString(this.props.time)}
               timezone={this.timeZoneMapper()}
             />
-
             <City
-              city={this.state.location.city}
-              country={this.state.location.country_code}
+              city={this.props.location.city}
+              country={this.props.location.country_code}
             />
           </>
         )}
