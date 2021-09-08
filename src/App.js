@@ -2,6 +2,7 @@ import "./App.css";
 import ProgrammingQuotes from "./components/ProgrammingQuotes";
 import React, { Component } from "react";
 import ClockContainer from "./components/ClockContainer/ClockContainer";
+import Button from "./components/Button";
 
 export default class App extends Component {
   state = {
@@ -27,13 +28,7 @@ export default class App extends Component {
   }
 
   tick = () => {
-    const newTime = new Date();
-    const timeOfDay = this.getTimeOfDay(newTime.getHours());
-    const newState = { time: newTime };
-    if (this.state.timeOfDay !== timeOfDay) {
-      newState.timeOfDay = timeOfDay;
-    }
-    this.setState(newState);
+    this.setState({ time: new Date() });
   };
 
   handleResize = () => {
@@ -60,21 +55,26 @@ export default class App extends Component {
     }
   }
 
-  setTimeOfDay = (timeOfDay) => {};
-
   render() {
+    const hour = this.state.time.getHours();
     return (
       <div
         className="app"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
-          url("./assets/${this.getDevice()}/bg-image-${
-            this.state.timeOfDay
-          }time.jpg")`,
+          url("./assets/${this.getDevice()}/bg-image-${this.getTimeOfDay(
+            hour
+          )}time.jpg")`,
         }}
       >
         <ProgrammingQuotes />
-        <ClockContainer time={this.state.time} location={this.state.location} />
+        <main>
+          <ClockContainer
+            time={this.state.time}
+            location={this.state.location}
+          />
+          <Button />
+        </main>
       </div>
     );
   }
