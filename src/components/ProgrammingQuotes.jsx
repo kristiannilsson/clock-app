@@ -26,7 +26,7 @@ export default class ProgrammingQuotes extends Component {
   }
   render() {
     return (
-      <div className={styles.container}>
+      <div className={styles.container} style={{ display: this.props.display }}>
         {this.state.quote && (
           <p data-testid="quote" className={styles.quote}>
             "{this.state.quote}"<br /> <br />

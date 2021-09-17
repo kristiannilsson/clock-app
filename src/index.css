@@ -10,6 +10,18 @@ html {
 p {
   all: unset;
 }
+button {
+  all: unset;
+}
+
+body {
+  overflow: hidden;
+}
+
+.bg-container {
+  background-size: cover;
+  height: 100vh;
+}
 
 * {
   margin: 0;

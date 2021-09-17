@@ -3,12 +3,18 @@ import ProgrammingQuotes from "./components/ProgrammingQuotes";
 import React, { Component } from "react";
 import ClockContainer from "./components/ClockContainer/ClockContainer";
 import Button from "./components/Button";
+import DateInfo from "./components/DateInfo";
 
 export default class App extends Component {
   state = {
     windowWidth: window.innerWidth,
     time: new Date(),
     location: undefined,
+    styles: {
+      appClassname: "app",
+      quotesDisplay: "flex",
+      dateInfoPos: "-40vh",
+    },
   };
   async componentDidMount() {
     window.addEventListener("resize", this.handleResize);
@@ -28,7 +34,10 @@ export default class App extends Component {
   }
 
   tick = () => {
-    this.setState({ time: new Date() });
+    const newTime = new Date();
+    if (newTime.getMinutes() !== this.state.time.getMinutes()) {
+      this.setState({ time: new Date() });
+    }
   };
 
   handleResize = () => {
@@ -55,27 +64,56 @@ export default class App extends Component {
     }
   }
 
+  handleButtonClick = () => {
+    clearInterval(this.timer);
+    if (this.state.styles.appClassname === "app") {
+      this.setState({
+        styles: {
+          appClassname: "app app-collapse",
+          quotesDisplay: "none",
+          dateInfoPos: 0,
+        },
+      });
+    } else {
+      this.setState({
+        styles: {
+          appClassname: "app",
+          quotesDisplay: "flex",
+          dateInfoPos: "-40vh",
+        },
+      });
+    }
+    this.timer = setInterval(this.tick, 1000);
+  };
+
   render() {
+    console.log("render");
     const hour = this.state.time.getHours();
     return (
-      <div
-        className="app"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+      <>
+        <div
+          className="bg-container"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
           url("./assets/${this.getDevice()}/bg-image-${this.getTimeOfDay(
-            hour
-          )}time.jpg")`,
-        }}
-      >
-        <ProgrammingQuotes />
-        <main>
-          <ClockContainer
-            time={this.state.time}
-            location={this.state.location}
-          />
-          <Button />
-        </main>
-      </div>
+              hour
+            )}time.jpg")`,
+            height: "100vh",
+          }}
+        >
+          <div className={this.state.styles.appClassname}>
+            <ProgrammingQuotes display={this.state.styles.quotesDisplay} />
+            <main>
+              <ClockContainer
+                time={this.state.time}
+                location={this.state.location}
+              />
+              <Button callback={this.handleButtonClick} />
+            </main>
+          </div>
+        </div>
+        <DateInfo bottom={this.state.styles.dateInfoPos} />
+      </>
     );
   }
 }

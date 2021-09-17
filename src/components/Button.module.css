@@ -1,0 +1,24 @@
+.buttonContainer {
+  display: flex;
+  width: 115px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.buttonText {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  line-height: 14px;
+  letter-spacing: 3.75px;
+  margin-left: 17px;
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  margin-right: 4px;
+}
